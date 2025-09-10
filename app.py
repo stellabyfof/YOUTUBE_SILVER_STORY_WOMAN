@@ -120,7 +120,15 @@ DEFAULT_CHANNELS = {
     "4 금빛이야기": "UC8XIOLMm8kpoaEzjovaoesw",
     "5 인생사연": "UCT2S9OFvyF4rMZZQeNcIu3Q",
     "6 풀빛사연": "UCko5Mjg45-Kz8P2mq_2FFsg",
-    "7 랄라하의 사연드라마": "UCrRBSlHTvHGOd6hyF3DLPPw"
+    "7 랄라하의 사연드라마": "UCrRBSlHTvHGOd6hyF3DLPPw",
+    "8 인생은 그저 소풍": "UCC1QkO6jfYQoP7gpaUsaDUg",
+    "9 세대공감 사연드라마": "UCXMqVMRVQWc5WFR7FvWxGQA",
+    "10 사연나무": "UCkNQT75PDjH7xYAAU3TL6fw",
+    "11 인생마당": "UCl1JOZvMCD9WaC5odFMXQYw",
+    "12 사연사랑방": "UCMcVorIMLMWPOCGludbeU4g",
+    "13 황혼튜브": "UCo36q9bPCCqUqlTokse6OTw",
+    "14 수채화속 인생사연": "UCLgOsa-4EBchF90tuzfRInw",
+    "15 구름 같은 이야기": "UCVE2CnAhq2k2w9Tzey2Bqcw",
 }
 
 # ✅ 채널 선택
