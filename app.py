@@ -131,19 +131,25 @@ DEFAULT_CHANNELS = {
     "15 구름 같은 이야기": "UCVE2CnAhq2k2w9Tzey2Bqcw",
 }
 
-# ✅ 채널 선택
-selected_channels = []
+# ✅ 선택 상태 session_state로 관리
+if "selected_channels" not in st.session_state:
+    st.session_state["selected_channels"] = []
 
 col1, col2 = st.columns(2)
 if col1.button("✅ 전체 선택"):
-    selected_channels = list(DEFAULT_CHANNELS.values())
+    st.session_state["selected_channels"] = list(DEFAULT_CHANNELS.values())
 if col2.button("❌ 전체 해제"):
-    selected_channels = []
+    st.session_state["selected_channels"] = []
 
 with st.expander("📌 기본 채널 선택하기"):
     for name, cid in DEFAULT_CHANNELS.items():
-        if st.checkbox(f"{name} ({cid})", value=(cid in selected_channels)):
-            selected_channels.append(cid)
+        checked = cid in st.session_state["selected_channels"]
+        if st.checkbox(f"{name} ({cid})", value=checked, key=cid):
+            if cid not in st.session_state["selected_channels"]:
+                st.session_state["selected_channels"].append(cid)
+        else:
+            if cid in st.session_state["selected_channels"]:
+                st.session_state["selected_channels"].remove(cid)
 
 extra_input = st.text_area(
     "➕ 추가할 채널 URL 또는 채널 ID (한 줄에 하나씩)",
@@ -151,18 +157,30 @@ extra_input = st.text_area(
     placeholder="예시:\nUCxxxxxxxxxx\nhttps://www.youtube.com/@life4yeon"
 )
 extra_channels = [line.strip() for line in extra_input.splitlines() if line.strip()]
-all_channels = list(set(selected_channels + extra_channels))
+all_channels = list(set(st.session_state["selected_channels"] + extra_channels))
 
 # 실행
 if st.button("분석 시작"):
+    if not all_channels:
+        st.warning("👉 분석할 채널을 선택하세요.")
+        st.stop()
+
     all_results = pd.DataFrame()
-    for cid in all_channels:
+    progress = st.progress(0)   # 진행 표시
+    status_text = st.empty()
+
+    for i, cid in enumerate(all_channels, start=1):
         try:
+            status_text.text(f"🔎 {i}/{len(all_channels)} 채널 분석 중...")
             df, ch_name = get_channel_videos(cid, st.session_state["api_key"])
             if not df.empty:
                 all_results = pd.concat([all_results, df], ignore_index=True)
         except Exception as e:
             st.error(f"⚠️ {cid} 분석 실패: {e}")
+
+        progress.progress(i / len(all_channels))  # 진행 업데이트
+
+    status_text.text("✅ 분석 완료!")
 
     if not all_results.empty:
         # 🔎 필터링 조건 적용
